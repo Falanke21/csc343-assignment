@@ -59,7 +59,7 @@ FROM withName n LEFT JOIN party_family f
 CREATE VIEW answer AS
 SELECT n.countryName,
 	n.partyName,
-	n.partyFamily
+	n.partyFamily,
 	p.state_market AS stateMarket
 FROM withFamily n LEFT JOIN party_position p
 	ON n.party_id = p.party_id;
