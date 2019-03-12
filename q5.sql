@@ -60,5 +60,6 @@ INSERT INTO q5 (
 DROP VIEW IF EXISTS answer;
 DROP VIEW IF EXISTS non_decrease_ratio;
 DROP VIEW IF EXISTS non_decrease;
+DROP VIEW IF EXISTS non_mono;
 DROP VIEW IF EXISTS avg_ratio;
 DROP VIEW IF EXISTS in_range;
