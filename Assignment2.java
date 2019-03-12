@@ -98,7 +98,7 @@ public class Assignment2 extends JDBCSubmission {
         try {
             // get info about this politician
             PreparedStatement psThis = connection.prepareStatement(sqlFindThisPolitician);
-            psThis.setString(1, politicianName.toString());
+            psThis.setInt(1, politicianName.intValue());
             ResultSet rsThis = psThis.executeQuery();
             StringBuilder sb = new StringBuilder();
             rsThis.next();
@@ -108,7 +108,7 @@ public class Assignment2 extends JDBCSubmission {
 
             // get other politicians info
             PreparedStatement psAll = connection.prepareStatement(sqlFindAllPolitician);
-            psThis.setString(1, politicianName.toString());
+            psAll.setInt(1, politicianName.intValue());
             ResultSet rsAll = psAll.executeQuery();
 
             List<Integer> result = new ArrayList<>();
@@ -135,8 +135,10 @@ public class Assignment2 extends JDBCSubmission {
 		try {
 			Assignment2 as = new Assignment2();
 			as.connectDB(url, "wangzuoq", "");
-			ElectionCabinetResult res = as.electionSequence("Canada");
-			System.out.println(res);
+			ElectionCabinetResult res1 = as.electionSequence("Canada");
+			System.out.println(res1);
+			List<Integer> res2 = as.findSimilarPoliticians(148, 0.5f);
+			System.out.println(res2);
 			as.disconnectDB();
 		} catch(ClassNotFoundException e) {
 			System.out.println("Failed to find postgresql driver");
