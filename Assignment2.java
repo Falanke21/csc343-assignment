@@ -1,4 +1,3 @@
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,8 +91,42 @@ public class Assignment2 extends JDBCSubmission {
 
     @Override
     public List<Integer> findSimilarPoliticians(Integer politicianName, Float threshold) {
-        // Implement this method!
-        return null;
+        // set up sql string
+        String sqlFindThisPolitician = "SELECT description, comment FROM politician_president WHERE id = ? ";
+        String sqlFindAllPolitician = "SELECT description, comment, id FROM politician_president WHERE id <> ? ";
+
+        try {
+            // get info about this politician
+            PreparedStatement psThis = connection.prepareStatement(sqlFindThisPolitician);
+            psThis.setString(1, politicianName.toString());
+            ResultSet rsThis = psThis.executeQuery();
+            StringBuilder sb = new StringBuilder();
+            rsThis.next();
+            sb.append(rsThis.getString("description"));
+            sb.append(rsThis.getString("comment"));
+            String politicianInfo = sb.toString();
+
+            // get other politicians info
+            PreparedStatement psAll = connection.prepareStatement(sqlFindAllPolitician);
+            psThis.setString(1, politicianName.toString());
+            ResultSet rsAll = psAll.executeQuery();
+
+            List<Integer> result = new ArrayList<>();
+
+            while (rsAll.next()){
+                sb = new StringBuilder();
+                sb.append(rsAll.getString("description"));
+                sb.append(rsAll.getString("description"));
+                String otherPoliticianInfo = sb.toString();
+                if (similarity(politicianInfo, otherPoliticianInfo) >= threshold){
+                    result.add(rsAll.getInt("id"));
+                }
+            }
+            return result;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static void main(String[] args) {
