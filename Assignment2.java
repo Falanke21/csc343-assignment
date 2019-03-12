@@ -24,7 +24,7 @@ public class Assignment2 extends JDBCSubmission {
             connection = DriverManager.getConnection(url, username, password);
             PreparedStatement execStat = connection.prepareStatement(
                     "SET SEARCH_PATH TO parlgov");
-            execStat.executeQuery();
+            execStat.executeUpdate();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -131,8 +131,17 @@ public class Assignment2 extends JDBCSubmission {
 
     public static void main(String[] args) {
         // You can put testing code in here. It will not affect our autotester.
-        System.out.println("Hello");
+		String url = "jdbc:postgresql://localhost:5432/csc343h-wangzuoq";
+		try {
+			Assignment2 as = new Assignment2();
+			as.connectDB(url, "wangzuoq", "");
+			ElectionCabinetResult res = as.electionSequence("Canada");
+			System.out.println(res);
+			as.disconnectDB();
+		} catch(ClassNotFoundException e) {
+			System.out.println("Failed to find postgresql driver");
+			e.printStackTrace();
+		}
     }
 
 }
-
