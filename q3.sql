@@ -103,8 +103,8 @@ resultParties5.election_id AS mostRecentlyWonElectionId,
 resultParties5.most_recent_year AS mostRecentlyWonElectionYear
 FROM resultParties5, country, party
 WHERE country.id = resultParties5.country_id
-AND party.id = resultParties5.winners
-ORDER BY countryName, wonElections, partyName DESC;
+AND party.id = resultParties5.winners;
+-- ORDER BY countryName, wonElections, partyName DESC
 
 
 insert into q3 (countryName, partyName, partyFamily, wonElections, mostRecentlyWonElectionId, mostRecentlyWonElectionYear)
