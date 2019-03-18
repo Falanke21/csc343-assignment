@@ -8,7 +8,7 @@ CREATE TABLE q3(
     -- name of the party
     partyName VARCHAR(100) NOT NULL,
     -- name of the family of a party
-    partyFamily VARCHAR(50) NOT NULL,
+    partyFamily VARCHAR(50),
     -- number of elections the party has won
     wonElections INT NOT NULL,
     -- The id of the election that was most recently won by this party
