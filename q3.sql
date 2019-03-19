@@ -93,13 +93,13 @@ ON totalWin.country_id = totalNumParties.country_id;
 
 -- the parties that we want
 CREATE VIEW resultParties1 AS
-SELECT averages.country_id, temp.id AS winners
+SELECT averages.country_id, countWinsWithCountry.id AS winners
 FROM averages,
     (SELECT country_id, party.id, count
     FROM partyToCountWins JOIN party
-    ON partyToCountWins.party_id = party.id) temp
-WHERE averages.country_id = temp.country_id
-AND temp.count - averages.avg > 3;
+    ON partyToCountWins.party_id = party.id) countWinsWithCountry
+WHERE averages.country_id = countWinsWithCountry.country_id
+AND countWinsWithCountry.count > averages.avg * 3;
 
 -- FIXING
 
