@@ -50,8 +50,7 @@ FROM winningParty
 GROUP BY party_id
 ORDER BY party_id;
 
--- -- FIXING TWO
--- average = total win times / number of parties attended election in that country
+-- average = total win times / number of parties in that country
 
 -- each country's party total win times
 CREATE VIEW totalWin AS
@@ -61,35 +60,18 @@ WHERE partyToCountWins.party_id = party.id
 GROUP BY country_id
 ORDER BY country_id;
 
--- each country's number of parties who has attended elections
--- CREATE VIEW totalNumParties AS
--- SELECT country_id, COUNT(DISTINCT election_result.party_id)
--- FROM party JOIN election_result
--- ON party.id = election_result.party_id
--- GROUP BY country_id
--- ORDER BY country_id;
-
+-- each country's number of parties
 CREATE VIEW totalNumParties AS
 SELECT country_id, count(id)
 FROM party
 GROUP BY country_id;
 
+-- average winning times associated with each country
 CREATE VIEW averages AS
 SELECT totalWin.country_id, totalWin.sum / totalNumParties.count AS avg
 FROM totalWin JOIN totalNumParties
 ON totalWin.country_id = totalNumParties.country_id;
--- -- FIXING TWO
 
-
-
-
--- -- average winning times associated with each country
--- CREATE VIEW averages AS
--- SELECT country_id, AVG(count)
--- FROM partyToCountWins, party
--- WHERE partyToCountWins.party_id = party.id
--- GROUP BY country_id
--- ORDER BY country_id;
 
 -- the parties that we want
 CREATE VIEW resultParties1 AS
@@ -101,7 +83,6 @@ FROM averages,
 WHERE averages.country_id = countWinsWithCountry.country_id
 AND countWinsWithCountry.count > averages.avg * 3;
 
--- FIXING
 
 -- winners and all its associated elections
 CREATE VIEW winnersAndElections AS
@@ -153,11 +134,6 @@ year AS mostRecentlyWonElectionYear
 FROM resultParties4, party, country
 WHERE resultParties4.winners = party.id
 AND resultParties4.country_id = country.id;
-
-
--- FIXING
-
--- -- ORDER BY countryName, wonElections, partyName DESC
 
 
 insert into q3 (countryName, partyName, partyFamily, wonElections, mostRecentlyWonElectionId, mostRecentlyWonElectionYear)
