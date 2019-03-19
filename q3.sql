@@ -20,6 +20,8 @@ CREATE TABLE q3(
 -- views
 DROP VIEW IF EXISTS winningParty CASCADE;
 DROP VIEW IF EXISTS partyToCountWins CASCADE;
+DROP VIEW IF EXISTS totalWin CASCADE;
+DROP VIEW IF EXISTS totalNumParties CASCADE;
 DROP VIEW IF EXISTS averages CASCADE;
 DROP VIEW IF EXISTS resultParties1 CASCADE;
 DROP VIEW IF EXISTS winnersAndElections CASCADE;
@@ -48,13 +50,41 @@ FROM winningParty
 GROUP BY party_id
 ORDER BY party_id;
 
--- average winning times associated with each country
-CREATE VIEW averages AS
-SELECT country_id, AVG(count)
+-- -- FIXING TWO
+-- average = total win times / number of parties attended election in that country
+
+-- each country's party total win times
+CREATE VIEW totalWin AS
+SELECT country_id, SUM(count)
 FROM partyToCountWins, party
 WHERE partyToCountWins.party_id = party.id
 GROUP BY country_id
 ORDER BY country_id;
+
+-- each country's number of parties who has attended elections
+CREATE VIEW totalNumParties AS
+SELECT country_id, COUNT(DISTINCT election_result.party_id)
+FROM party JOIN election_result
+ON party.id = election_result.party_id
+GROUP BY country_id
+ORDER BY country_id;
+
+CREATE VIEW averages AS
+SELECT totalWin.country_id, totalWin.sum / totalNumParties.count AS avg
+FROM totalWin JOIN totalNumParties
+ON totalWin.country_id = totalNumParties.country_id;
+-- -- FIXING TWO
+
+
+
+
+-- -- average winning times associated with each country
+-- CREATE VIEW averages AS
+-- SELECT country_id, AVG(count)
+-- FROM partyToCountWins, party
+-- WHERE partyToCountWins.party_id = party.id
+-- GROUP BY country_id
+-- ORDER BY country_id;
 
 -- the parties that we want
 CREATE VIEW resultParties1 AS
@@ -131,6 +161,8 @@ FROM resultParties5;
 
 DROP VIEW IF EXISTS winningParty CASCADE;
 DROP VIEW IF EXISTS partyToCountWins CASCADE;
+DROP VIEW IF EXISTS totalWin CASCADE;
+DROP VIEW IF EXISTS totalNumParties CASCADE;
 DROP VIEW IF EXISTS averages CASCADE;
 DROP VIEW IF EXISTS resultParties1 CASCADE;
 DROP VIEW IF EXISTS winnersAndElections CASCADE;
