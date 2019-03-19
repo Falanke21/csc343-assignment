@@ -13,7 +13,7 @@ DROP VIEW IF EXISTS recentCabinet;
 CREATE VIEW recentCabinet AS
 SELECT country_id, id AS cabinet_id
 FROM cabinet
-WHERE EXTRACT(YEAR FROM start_date) > 1996;
+WHERE EXTRACT(YEAR FROM start_date) >= 1999;
 
 -- Find involvement information in the range.
 DROP VIEW IF EXISTS recentInfo;
