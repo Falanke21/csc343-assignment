@@ -62,12 +62,17 @@ GROUP BY country_id
 ORDER BY country_id;
 
 -- each country's number of parties who has attended elections
+-- CREATE VIEW totalNumParties AS
+-- SELECT country_id, COUNT(DISTINCT election_result.party_id)
+-- FROM party JOIN election_result
+-- ON party.id = election_result.party_id
+-- GROUP BY country_id
+-- ORDER BY country_id;
+
 CREATE VIEW totalNumParties AS
-SELECT country_id, COUNT(DISTINCT election_result.party_id)
-FROM party JOIN election_result
-ON party.id = election_result.party_id
-GROUP BY country_id
-ORDER BY country_id;
+SELECT country_id, count(id)
+FROM party
+GROUP BY country_id;
 
 CREATE VIEW averages AS
 SELECT totalWin.country_id, totalWin.sum / totalNumParties.count AS avg
